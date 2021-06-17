@@ -15,7 +15,7 @@ module network
             integer :: unit, offset
 
             call get_ne(unit,offset)
-            allocate(V_net(2*E_net),P_ini(N_net),p_fin(N_net),D_net(N_net))
+            allocate(V_net(2*E_net),P_ini(N_net),P_fin(N_net),D_net(N_net))
             V_net = 0
             P_ini = 0
             P_fin = 0
@@ -146,6 +146,14 @@ module network
             end do
       end subroutine print_info
 
+      subroutine deallocate_network()
+            implicit none
+
+            if (allocated(V_net)) deallocate(V_net)
+            if (allocated(P_ini)) deallocate(P_ini)
+            if (allocated(P_fin)) deallocate(P_fin)
+            if (allocated(D_net)) deallocate(D_net)
+      end subroutine deallocate_network
 
 !------------------------------- Correlations ----------------------------------
 
