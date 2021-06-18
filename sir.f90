@@ -2,7 +2,7 @@ module sir
       use network 
       use mtmod
       implicit none
-      integer             :: N_inf,E_act
+      integer             :: N_inf,N_ina,E_act
       integer,allocatable :: inf(:),act_link(:,:),P_act_link(:),states(:)
 
       contains
@@ -66,19 +66,39 @@ module sir
                         end do
                   end if
             end do
+            N_ina = N_net-N_inf
       end subroutine init_states
 
       subroutine rem_link(P_inf)
             implicit none
             integer :: P_inf
+            integer :: j
             print *, act_link(:,P_act_link(P_inf))
             act_link(:,P_act_link(P_inf)) = act_link(:,E_act)
-            act_link(:,E_act) = 0
-                        ! Cal actualitzar el P_act_link del ultim que passa a dalt
-                        !Aixo ha de ser un punter, no un node
-            P_act_link(act_link(1,E_act)) = P_act_link(P_inf)
-            P_act_link(act_link(2,E_act)) = P_act_link(P_inf)
 
+            !A: Implementacio extremadament cutre:
+            !Mirem tots els punters dels veins del node infectat de l'ultim
+            !link actiu.
+            do j=P_ini(act_link(1,E_act)),P_fin(act_link(1,E_act))
+                  !Si el punter correspon a l'altre node del link
+                  if(V_net(j)==act_link(2,E_act)) then
+                        !Substituim el punter corresponent pel punter nou
+                        P_act_link(j) = P_act_link(P_inf)
+                        exit !Sortim del loop, mes eficient.
+                  end if
+            end do
+
+            !El mateix pero ara mirem tots els punters del node no infectat
+            !I canviem el punter del node infectat (per redundancia)
+            !Tinc la sensacio de que aquest segon bucle es pot evitar, pero no estic segur
+            do j=P_ini(act_link(2,E_act)),P_fin(act_link(2,E_act))
+                  if(V_net(j)==act_link(1,E_act)) then
+                        P_act_link(j) = P_act_link(P_inf)
+                  end if
+            end do
+            
+            !Netejem l'ultim link i reduim el compte de links
+            act_link(:,E_act) = 0
             E_act = E_act - 1
       end subroutine rem_link
 
@@ -94,6 +114,7 @@ module sir
             do j=P_ini(V_net(P_inf)),P_fin(V_net(P_inf))
                   if(V_net(j)==n_inf) then
                         P_act_link(j) = E_act
+                        exit !Podem sortir del loop un cop hem acabat.
                   end if
             end do
       end subroutine add_link

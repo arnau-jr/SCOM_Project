@@ -10,7 +10,7 @@ call sgrnd(879465132)
 
 open(1,file="out.moreno_zebra_zebra")
 
-call ini_net(1,2)
+call init_net(1,2)
 close(1)
 
 open(1,file="moreno_zebra.info")

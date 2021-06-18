@@ -10,7 +10,7 @@ module network
       !     - avgD, avgD2: average degree and square degree (<k> and <k^2>)
       contains
 
-      subroutine ini_net(unit,offset)
+      subroutine init_net(unit,offset)
             implicit none
             integer :: unit, offset
 
@@ -27,7 +27,7 @@ module network
             call get_pointers(unit,offset)
 
             call get_average_degree()
-      end subroutine ini_net
+      end subroutine init_net
 
       subroutine get_ne(unit,offset)
             implicit none

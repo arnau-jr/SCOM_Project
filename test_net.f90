@@ -16,7 +16,7 @@ integer            :: i
 
 open(1,file="out.twin")
 
-call ini_net(1,1)
+call init_net(1,1)
 close(1)
 
 open(1,file="results/twin.info")
