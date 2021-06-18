@@ -102,17 +102,17 @@ module sir
             E_act = E_act - 1
       end subroutine rem_link
 
-      subroutine add_link(n_inf,P_inf)
+      subroutine add_link(new_inf,P_inf)
             implicit none
-            integer,intent(in) :: n_inf,P_inf
+            integer,intent(in) :: new_inf,P_inf
             integer :: j
 
             E_act = E_act + 1
-            act_link(:, E_act) = (/n_inf,V_net(P_inf)/)
+            act_link(:, E_act) = (/new_inf,V_net(P_inf)/)
 
             P_act_link(P_inf) = E_act
             do j=P_ini(V_net(P_inf)),P_fin(V_net(P_inf))
-                  if(V_net(j)==n_inf) then
+                  if(V_net(j)==new_inf) then
                         P_act_link(j) = E_act
                         exit !Podem sortir del loop un cop hem acabat.
                   end if
