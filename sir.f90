@@ -66,6 +66,7 @@ module sir
                   end if
             end do
             N_ina = N_net-N_inf
+            N_rec = 0
       end subroutine init_states
 
       subroutine rem_link(P_link)
@@ -183,7 +184,7 @@ module sir
             end do
             inf(N_inf) = 0
             N_inf = N_inf - 1
-            N_ina = N_ina + 1
+            N_rec = N_rec + 1
       end subroutine recover_node
       
       subroutine sir_step(t)
@@ -191,7 +192,9 @@ module sir
             real*8,intent(inout) :: t
             real*8               :: prob_norm,prob_inf,prob_rec
             real*8               :: x
-            integer              :: new_infected,new_recovered,node
+            integer              :: new_infected,new_recovered,node,unit
+
+            unit = 2 !A: badly done
 
             prob_norm = N_inf*delta + E_act*lambda
             prob_inf = E_act*lambda/prob_norm
@@ -201,12 +204,12 @@ module sir
 
             if(x<prob_inf) then
                   new_infected = choose_int(E_act)
-                  print*,"Infecting link",act_link(:,new_infected)
+                  write(unit,*)"Infecting link",act_link(:,new_infected)
                   node = act_link(2,new_infected)
                   call infect_node(node)
             else
                   new_recovered = choose_int(N_inf)
-                  print*,"Recovering node",inf(new_recovered)
+                  write(unit,*)"Recovering node",inf(new_recovered)
                   node = inf(new_recovered)
                   call recover_node(node)
             end if

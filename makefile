@@ -3,6 +3,7 @@ comp = gfortran
 OPT = -O3 -fbounds-check
 
 main.x: $(objects)
+	mkdir -p results
 	$(comp) -o main.x $(OPT) $(objects)
 
 network.o: network.f90
@@ -17,5 +18,14 @@ mtfort90.o : mtfort90.f90
 main.o: main.f90 network.o sir.o
 	$(comp) -c $(OPT) main.f90 network.f90 sir.f90
 
+sim: main.x
+	./main.x
+	make plots
+
+plots:
+	mkdir -p results/plots
+	gnuplot plot_evo.plt
+
 clean:
 	rm -f $(objects)
+
