@@ -70,4 +70,10 @@ close(2)
 !       end do
 ! end do
 
+
+open(1,file="results/adj_list.dat")
+do i=1,N_net
+      write(1,*)i,V_net(P_ini(i):P_fin(i))
+end do
+
 end program test_net
