@@ -58,7 +58,6 @@ module sir
 
                         do j=P_ini(choice),P_fin(choice)
                               if(states(V_net(j)) == 1) then
-                                    ! call rem_link(j)
                                     call rem_link(P_act_link(j))
                               else
                                     call add_link(choice,j)
@@ -73,9 +72,7 @@ module sir
             implicit none
             integer,intent(in) :: P_link
             integer :: i
-            ! if(P_link==0) call print_sir_info(6)
             act_link(:,P_link) = act_link(:,E_act)
-
             do i=P_ini(act_link(1,P_link)),P_fin(act_link(1,P_link))
                   if(V_net(i) == act_link(2,P_link)) then
                         P_act_link(i) = P_link
@@ -148,11 +145,9 @@ module sir
             integer,intent(in) :: node
 
             integer :: i
-            print*,node
             if (states(node) == 1) print *, "Trying to infect an infected node"
 
             do i = P_ini(node), P_fin(node)
-                  print *, "E_act=", E_act
                   if (states(V_net(i)) == 0) then
                         call add_link(node, i)
                   else if (states(V_net(i)) == 1) then
@@ -191,34 +186,29 @@ module sir
             N_ina = N_ina + 1
       end subroutine recover_node
       
-      subroutine sir_step(t, k)
+      subroutine sir_step(t)
             implicit none
             real*8,intent(inout) :: t
             real*8               :: prob_norm,prob_inf,prob_rec
             real*8               :: x
-            logical :: x_prob(2)
-            integer              :: new_infected,new_recovered, k
+            integer              :: new_infected,new_recovered,node
 
             prob_norm = N_inf*delta + E_act*lambda
             prob_inf = E_act*lambda/prob_norm
             prob_rec = N_inf*delta/prob_norm
-            
-            ! x = grnd()
-            ! x_prob = (/.false., .true./)
+
             x = grnd()
 
             if(x<prob_inf) then
-            ! if(x_prob(k)) then
                   new_infected = choose_int(E_act)
                   print*,"Infecting link",act_link(:,new_infected)
-                  ! call infect_node(int(act_link(2,new_infected)))
-                  call infect_node(act_link(2,new_infected))
-                  ! call infect_node(12)
+                  node = act_link(2,new_infected)
+                  call infect_node(node)
             else
                   new_recovered = choose_int(N_inf)
                   print*,"Recovering node",inf(new_recovered)
-                  call recover_node(inf(new_recovered))
-                  ! call recover_node(17)
+                  node = inf(new_recovered)
+                  call recover_node(node)
             end if
 
             t = t + exp_number(prob_norm)

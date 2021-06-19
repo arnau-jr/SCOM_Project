@@ -26,14 +26,19 @@ call init_sir()
 call init_states(5)
 
 t = 0.d0
+i = 0
 call print_sir_info(6)
-! call recover_node(17)
-! call infect_node(12)
-! call infect_node(15)
-do i = 1, 2
-    call sir_step(t, i)
+do while(.true.)
+    call sir_step(t)
+    i = i + 1
+    if(N_inf==0) exit
 end do
-call print_sir_info(6)
+
+print*,""
+print*,"---End of the infection"
+print*,"Iterations",i
 print*,"Time",t
+call print_sir_info(6)
+
 
 end program test_net
