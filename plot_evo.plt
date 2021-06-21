@@ -73,6 +73,7 @@ set key inside top right vertical
 set ylabel "# Infected"
 
 set palette defined ( 0 "#118ab2", 0.5 "#06d6a0", 1 "#ef476f" )
+unset colorbox
 
 plot for [i=1:23:2] sprintf("results/lambda_%5.3f_evolution_histo.dat", i/100.) u 1:3:0 \
                     w l lw 1.5 lc palette frac (i / 23.) t sprintf("λ = %5.2f", i/100.)
