@@ -2,7 +2,7 @@ module sir
       use network 
       use mtmod
       implicit none
-      integer             :: N_inf,N_ina,E_act,N_rec
+      integer             :: N_inf,N_sus,E_act,N_rec
       integer,allocatable :: inf(:),act_link(:,:),P_act_link(:),states(:)
       real*8              :: lambda,delta
 
@@ -65,7 +65,7 @@ module sir
                         end do
                   end if
             end do
-            N_ina = N_net-N_inf
+            N_sus = N_net-N_inf
             N_rec = 0
       end subroutine init_states
 
@@ -158,7 +158,7 @@ module sir
             states(node) = 1
             N_inf = N_inf + 1
             inf(N_inf) = node
-            N_ina = N_ina - 1
+            N_sus = N_sus - 1
       end subroutine infect_node
 
       subroutine recover_node(node)
@@ -194,7 +194,7 @@ module sir
             real*8               :: x
             integer              :: new_infected,new_recovered,node,unit
 
-            unit = 2 !A: badly done
+            ! unit = 2 !A: badly done
 
             prob_norm = N_inf*delta + E_act*lambda
             prob_inf = E_act*lambda/prob_norm
@@ -204,12 +204,12 @@ module sir
 
             if(x<prob_inf) then
                   new_infected = choose_int(E_act)
-                  write(unit,*)"Infecting link",act_link(:,new_infected)
+                  ! write(unit,*)"Infecting link",act_link(:,new_infected)
                   node = act_link(2,new_infected)
                   call infect_node(node)
             else
                   new_recovered = choose_int(N_inf)
-                  write(unit,*)"Recovering node",inf(new_recovered)
+                  ! write(unit,*)"Recovering node",inf(new_recovered)
                   node = inf(new_recovered)
                   call recover_node(node)
             end if

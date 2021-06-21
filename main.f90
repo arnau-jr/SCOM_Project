@@ -3,53 +3,138 @@ use network
 use sir
 use mtmod
 implicit none
-real*8,allocatable :: histo(:),histo_acu(:),knn(:)
+real*8,parameter   :: dt = 0.1d0
+integer,parameter  :: Nt = 1000,N_sample = 1000
+integer            :: N_sus_histo(Nt,N_sample),N_inf_histo(Nt,N_sample),N_rec_histo(Nt,N_sample)
+real*8             :: N_sus_histo_acu(Nt),N_inf_histo_acu(Nt),N_rec_histo_acu(Nt)
+
 real*8             :: t
-integer            :: i,j
+integer            :: i,j,sample,k_t,lambda_i
+
+real*8,parameter   :: dlambda = 0.02d0
+integer,parameter  :: N_lambda = int((1.0d0-0.01d0)/dlambda) + 1
+real*8             :: lambda_array(N_lambda)
+real*8             :: rec_all(N_lambda)
+
+character :: filename*90,fmtlabel*90
 
 delta = 1.d0
-lambda = 0.5d0
+
+do i = 1, N_lambda
+      lambda_array(i) = 0.01 + (i - 1) * dlambda
+end do
 
 call sgrnd(879465132)
 
-open(1,file="out.moreno_zebra_zebra")
+open(1,file="out.arenas-email")
 
 call init_net(1,2)
 close(1)
 
-open(1,file="moreno_zebra.info")
+open(1,file="arenas-email.info")
 call print_info(1)
 close(1)
 
 call init_sir()
-call init_states(5)
 
-open(1,file="results/evolution.dat")
-write(1,*)"Time  Inactive  Infected  Recovered  Total(ct.)"
+do lambda_i=1,N_lambda
+      print*,lambda_i,"of",N_lambda
+      lambda = lambda_array(lambda_i)
 
-open(2,file="results/log.txt")
-call print_info(2)
+      N_sus_histo = 0.d0
+      N_inf_histo = 0.d0
+      N_rec_histo = 0.d0
 
-t = 0.d0
-i = 0
-call print_sir_info(2)
-do while(.true.)
-      call sir_step(t)
-      i = i + 1
+      ! open(1,file="results/evolution.dat")
+      ! write(1,*)"Time  Inactive  Infected  Recovered  Total(ct.)"
 
-      write(1,*)t,N_ina,N_inf,N_rec,N_ina+N_inf+N_rec
+      ! open(2,file="results/log.txt")
 
-      if(N_inf==0) exit
+      do sample=1,N_sample
+            call init_states(5)
+
+            ! N_sus_histo(1) = N_sus_histo(1) + N_sus
+            ! N_inf_histo(1) = N_inf_histo(1) + N_inf
+            ! N_rec_histo(1) = N_rec_histo(1) + N_rec
+
+            N_sus_histo(1,sample) = N_sus
+            N_inf_histo(1,sample) = N_inf
+            N_rec_histo(1,sample) = N_rec
+            
+            ! call print_info(2)
+
+            t = 0.d0
+            i = 0
+            ! call print_sir_info(2)
+            do while(.true.)
+                  call sir_step(t)
+                  i = i + 1
+
+                  k_t = int(t/dt) + 2
+
+                  ! N_sus_histo(k_t) = N_sus_histo(k_t) + N_sus
+                  ! N_inf_histo(k_t) = N_inf_histo(k_t) + N_inf
+                  ! N_rec_histo(k_t) = N_rec_histo(k_t) + N_rec
+
+                  N_sus_histo(k_t,sample) = N_sus
+                  N_inf_histo(k_t,sample) = N_inf
+                  N_rec_histo(k_t,sample) = N_rec
+
+                  ! write(1,*)t,N_sus,N_inf,N_rec,N_sus+N_inf+N_rec
+
+                  if(N_inf==0) then
+                        ! N_sus_histo(k_t+1:Nt) = N_sus_histo(k_t+1:Nt) + N_sus
+                        ! N_inf_histo(k_t+1:Nt) = N_inf_histo(k_t+1:Nt) + N_inf
+                        ! N_rec_histo(k_t+1:Nt) = N_rec_histo(k_t+1:Nt) + N_rec
+                        N_sus_histo(k_t+1:Nt,sample) = N_sus
+                        N_inf_histo(k_t+1:Nt,sample) = N_inf
+                        N_rec_histo(k_t+1:Nt,sample) = N_rec
+                        
+                        do j = 2, k_t
+                              if (N_sus_histo(j,sample) == 0) N_sus_histo(j,sample) = N_sus_histo(j-1,sample)
+                              if (N_inf_histo(j,sample) == 0) N_inf_histo(j,sample) = N_inf_histo(j-1,sample)
+                              if (N_rec_histo(j,sample) == 0) N_rec_histo(j,sample) = N_rec_histo(j-1,sample)
+                        end do
+                        exit
+                  end if
+            end do
+
+            ! write(2,*)""
+            ! write(2,*)"---End of the infection"
+            ! write(2,*)"Iterations",i
+            ! write(2,*)"Time",t
+            ! call print_sir_info(2)
+      end do
+
+      N_sus_histo_acu = dble(sum(N_sus_histo,2))/N_sample
+      N_inf_histo_acu = dble(sum(N_inf_histo,2))/N_sample
+      N_rec_histo_acu = dble(sum(N_rec_histo,2))/N_sample
+
+      rec_all(lambda_i) = N_rec_histo_acu(Nt)/N_net
+
+      ! open(3,file="results/evolution_histo.dat")
+      write(filename,"(A,F5.3,A)")"results/lambda_",lambda,"_evolution_histo.dat"
+      open(3,file=filename)
+      write(3,*)"#Time  Inactive  Infected  Recovered  Total(ct.)"
+      write(3,*)0.d0,N_sus_histo_acu(1),N_inf_histo_acu(1),N_rec_histo_acu(1),&
+      N_sus_histo_acu(1) + N_inf_histo_acu(1) + N_rec_histo_acu(1)
+
+      do i=1,Nt-1
+            write(3,*)dt*i,N_sus_histo_acu(i+1),N_inf_histo_acu(i+1),N_rec_histo_acu(i+1),&
+            N_sus_histo_acu(i+1) + N_inf_histo_acu(i+1) + N_rec_histo_acu(i+1)
+      end do
+      close(3)
 end do
 
-write(2,*)""
-write(2,*)"---End of the infection"
-write(2,*)"Iterations",i
-write(2,*)"Time",t
-call print_sir_info(2)
+open(4,file="results/rec_lambda.dat")
+write(4,*) "# lambda  recovered"
+do i = 1, N_lambda
+      write(4,*) lambda_array(i), rec_all(i)
+end do
+close(4)
 
-close(1)
-close(2)
+! close(1)
+! close(2)
 
 ! open(1,file="results/test.dat")
 ! do i=1,N_net
@@ -75,5 +160,4 @@ open(1,file="results/adj_list.dat")
 do i=1,N_net
       write(1,*)i,V_net(P_ini(i):P_fin(i))
 end do
-
 end program test_net

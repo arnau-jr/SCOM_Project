@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 G = nx.read_adjlist("results/adj_list.dat")
 
-nx.draw_networkx(G,with_labels=True)
+nx.draw_networkx(G)
 plt.show()
 
 
