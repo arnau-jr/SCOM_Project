@@ -68,26 +68,27 @@ set output "results/plots/lambda_all_hist.png"
 unset xlabel
 unset ylabel 
 
+set terminal pngcairo enhanced size 1280,980 font "Arial, 20" transparent lw 2
 set multiplot layout 4,3 upwards
 # set size 2560,2560
 unset key
-set font ",2"
 
-set lmargin 1.1
-set rmargin 1.1
-set tmargin 1.1
-set bmargin 1.1
-set format ""
+set rmargin 2.8
+set lmargin 2.8
+set tmargin 1
+set bmargin 1
+set xtics format "%g" font ",12" offset 0,0.5
+set ytics format "%g" font ",12" offset 0.4,0
 set tics front
 
-set title offset 0,-0.5
+set title offset 0,-0.7
 
 # unset xtics; unset ytics
 # set xtics format " "
 # set ytics format " "
 
 do for [i=1:23:2] {
-    set title sprintf("λ = %5.2f", i/100.) font ",12"
+    set title sprintf("λ = %5.2f", i/100.) font ",14"
     plot sprintf("results/lambda_%5.3f_evolution_histo.dat", i/100.) u 1:($2+$3+$4) w filledcurves x1 ls 1 t "Susceptible", \
                                 "" u 1:($3+$4)    w filledcurves x1 ls 3 t "Recovered", \
                                 "" u 1:3          w filledcurves x1 ls 2 t "Infected"
