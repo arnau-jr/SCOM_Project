@@ -67,5 +67,7 @@ set xrange [0:20]
 set key inside top right vertical
 set ylabel "# Infected"
 
-plot for [i=1:23:2] sprintf("results/lambda_%5.3f_evolution_histo.dat", i/100.) u 1:3 \
-                    w l lw 1.5 t sprintf("λ = %5.2f", i/100.)
+set palette defined ( 0 "#06d6a0", 0.5 "#118ab2", 1 "#ef476f" )
+
+plot for [i=1:23:2] sprintf("results/lambda_%5.3f_evolution_histo.dat", i/100.) u 1:3:0 \
+                    w l lw 1.5 lc palette frac (i / 23.) t sprintf("λ = %5.2f", i/100.)
