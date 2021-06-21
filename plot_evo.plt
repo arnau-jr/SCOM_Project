@@ -65,6 +65,7 @@ set output "results/plots/lambda_change.png"
 
 set xrange [0:20]
 set key inside top right vertical
+set ylabel "# Infected"
 
 plot for [i=1:23:2] sprintf("results/lambda_%5.3f_evolution_histo.dat", i/100.) u 1:3 \
                     w l lw 1.5 t sprintf("λ = %5.2f", i/100.)
