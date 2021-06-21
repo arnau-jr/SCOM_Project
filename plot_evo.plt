@@ -60,3 +60,11 @@ plot "results/evolution_histo.dat" u 1:($2+$3+$4) w filledcurves x1 ls 1 t "Susc
                                 "" u 1:($3+$4)    w filledcurves x1 ls 3 t "Recovered", \
                                 "" u 1:3          w filledcurves x1 ls 2 t "Infected"
 
+
+set output "results/plots/lambda_change.png"
+
+set xrange [0:20]
+set key inside top right vertical
+
+plot for [i=1:23:2] sprintf("results/lambda_%5.3f_evolution_histo.dat", i/100.) u 1:3 \
+                    w l lw 1.5 t sprintf("λ = %5.3f", i/100.)
