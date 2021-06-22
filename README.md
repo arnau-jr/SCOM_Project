@@ -16,7 +16,17 @@ For the simulation of the network named `net50000.dat` (stored in the `networks`
 
 The plots obtained are:
 
-#TODO
+1. Evolution of the infection curve changing the infectivity parameter.
+
+![Broken link](https://github.com/arnau-jr/SCOM_Project/blob/main/net50000.dat/plots/lambda_infect.png)
+
+2. All evolutions of susceptible, recovered and infected for all infectivity parameters.
+
+![Broken link](https://github.com/arnau-jr/SCOM_Project/blob/main/net50000.dat/plots/lambda_all_hist.png)
+
+3. The total amount of infected nodes at the end of the epidemic for different infectivity parameters.
+
+![Broken link](https://github.com/arnau-jr/SCOM_Project/blob/main/net50000.dat/plots/rec_lambda.png)
 
 ## About
 This code was developed by the authors for the subject of _Complex Systems_ of the _Computational Modelling_ Master in 2021.
