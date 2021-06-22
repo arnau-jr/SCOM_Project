@@ -1,5 +1,5 @@
 # Simulation of an Epidemic
-This code simulates the spread of an epidemic using the [SIR model](https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology#The_SIR_model "The SIR Model") over a [network](https://en.wikipedia.org/wiki/Graph_theory#Graph "Networks") of nodes connected with each other by undirected links. Infected nodes have a chance of recovering, becoming immune to the infeciton, or infecting one of their susceptible neighbors.
+This code simulates the spread of an epidemic using the [SIR model](https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology#The_SIR_model "The SIR Model") over a [network](https://en.wikipedia.org/wiki/Graph_theory#Graph "Networks") of nodes connected with each other by undirected links. Infected nodes have a chance of recovering, becoming immune to the infeciton, or infecting their susceptible neighbors.
 
 ## Usage
 There are three main commands.
