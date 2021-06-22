@@ -1,4 +1,4 @@
-program test_net
+program main
 use network
 use sir
 use mtmod
@@ -26,12 +26,12 @@ end do
 
 call sgrnd(879465132)
 
-open(1,file="out.arenas-email")
+open(1,file="networks/net1000.dat")
 
 call init_net(1,2)
 close(1)
 
-open(1,file="arenas-email.info")
+open(1,file="networks/net1000.dat.info")
 call print_info(1)
 close(1)
 
@@ -160,4 +160,4 @@ open(1,file="results/adj_list.dat")
 do i=1,N_net
       write(1,*)i,V_net(P_ini(i):P_fin(i))
 end do
-end program test_net
+end program main
