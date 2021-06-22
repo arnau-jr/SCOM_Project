@@ -3,7 +3,7 @@ comp = gfortran
 OPT = -O3 -fbounds-check
 
 main.x: $(objects)
-	mkdir -p results
+	mkdir -p $(dir_net)
 	$(comp) -o main.x $(OPT) $(objects)
 
 network.o: network.f90
@@ -19,12 +19,13 @@ main.o: main.f90 network.o sir.o
 	$(comp) -c $(OPT) main.f90 network.f90 sir.f90
 
 sim: main.x
-	./main.x
+	mkdir -p $(dir_net)
+	./main.x $(dir_net) $(N_sample) $(offset)
 	make plots
 
 plots:
-	mkdir -p results/plots
-	gnuplot plot_evo.plt
+	mkdir -p $(dir_net)/plots
+	gnuplot -e "directory='$(dir_net)" plots.plt
 
 clean:
 	rm -f $(objects)

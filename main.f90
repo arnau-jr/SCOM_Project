@@ -4,19 +4,28 @@ use sir
 use mtmod
 implicit none
 real*8,parameter   :: dt = 0.1d0
-integer,parameter  :: Nt = 1000,N_sample = 1000
-integer            :: N_sus_histo(Nt,N_sample),N_inf_histo(Nt,N_sample),N_rec_histo(Nt,N_sample)
+integer,parameter  :: Nt = 1000
+integer            :: N_sample, offset
+integer,allocatable:: N_sus_histo(:,:),N_inf_histo(:,:),N_rec_histo(:,:)
 real*8             :: N_sus_histo_acu(Nt),N_inf_histo_acu(Nt),N_rec_histo_acu(Nt)
 
 real*8             :: t
 integer            :: i,j,sample,k_t,lambda_i
 
 real*8,parameter   :: dlambda = 0.02d0
-integer,parameter  :: N_lambda = int((1.0d0-0.01d0)/dlambda) + 1
+integer,parameter  :: N_lambda = int((0.25d0-0.01d0)/dlambda) + 1
 real*8             :: lambda_array(N_lambda)
 real*8             :: rec_all(N_lambda)
 
-character :: filename*90,fmtlabel*90
+character :: filename*90,fmtlabel*90, dir_net*90, N_char*10, offset_char*10
+
+call get_command_argument(number=1, value=dir_net)
+call get_command_argument(number=2, value=N_char)
+read(N_char,*) N_sample
+call get_command_argument(number=3, value=offset_char)
+read(offset_char,*) offset
+
+allocate(N_sus_histo(Nt,N_sample),N_inf_histo(Nt,N_sample),N_rec_histo(Nt,N_sample))
 
 delta = 1.d0
 
@@ -26,12 +35,12 @@ end do
 
 call sgrnd(879465132)
 
-open(1,file="networks/net1000.dat")
+open(1,file="networks/"//trim(adjustl(dir_net)))
 
-call init_net(1,2)
+call init_net(1,offset)
 close(1)
 
-open(1,file="networks/net1000.dat.info")
+open(1,file="networks/"//trim(adjustl(dir_net))//".info")
 call print_info(1)
 close(1)
 
@@ -113,7 +122,7 @@ do lambda_i=1,N_lambda
       rec_all(lambda_i) = N_rec_histo_acu(Nt)/N_net
 
       ! open(3,file="results/evolution_histo.dat")
-      write(filename,"(A,F5.3,A)")"results/lambda_",lambda,"_evolution_histo.dat"
+      write(filename,"(A,F5.3,A)") trim(adjustl(dir_net))//"/lambda_",lambda,"_evolution_histo.dat"
       open(3,file=filename)
       write(3,*)"#Time  Inactive  Infected  Recovered  Total(ct.)"
       write(3,*)0.d0,N_sus_histo_acu(1),N_inf_histo_acu(1),N_rec_histo_acu(1),&
@@ -126,7 +135,7 @@ do lambda_i=1,N_lambda
       close(3)
 end do
 
-open(4,file="results/rec_lambda.dat")
+open(4,file=trim(adjustl(dir_net))//"/rec_lambda.dat")
 write(4,*) "# lambda  recovered"
 do i = 1, N_lambda
       write(4,*) lambda_array(i), rec_all(i)
@@ -156,7 +165,7 @@ close(4)
 ! end do
 
 
-open(1,file="results/adj_list.dat")
+open(1,file=trim(adjustl(dir_net))//"/adj_list.dat")
 do i=1,N_net
       write(1,*)i,V_net(P_ini(i):P_fin(i))
 end do

@@ -26,7 +26,7 @@ module network
 
             call get_pointers(unit,offset)
 
-            call get_average_degree()
+            ! call get_average_degree()
       end subroutine init_net
 
       subroutine get_ne(unit,offset)
