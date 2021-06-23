@@ -27,6 +27,8 @@ plots:
 	mkdir -p $(dir_net)/plots
 	gnuplot -e "directory='$(dir_net)" plots.plt
 
+hist:
+	gnuplot -e "path='$(file)" one_hist.plt
 clean:
 	rm -f $(objects)
 
