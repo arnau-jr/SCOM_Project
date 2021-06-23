@@ -16,10 +16,10 @@ set style line 1 pt 7 ps 1 lc rgbcolor "#118ab2"  # Recovered
 set style line 2 pt 7 ps 1 lc rgbcolor "#ef476f"  # Infected
 set style line 3 pt 7 ps 1 lc rgbcolor "#06d6a0"  # Susceptible
 
-set xlabel "Fraction of population"
+set xlabel "t (adim.)"
 set xrange [:20]
 
-set ylabel "t (adim.)"
+set ylabel "Fraction of population"
 
 set key horizontal outside center top font ", 24"
 
