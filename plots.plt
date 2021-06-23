@@ -1,6 +1,6 @@
 #!usr/bin/gnuplot
 set terminal postscript enhanced color eps 
-set terminal pngcairo enhanced size 1280,960 font "Arial, 20" transparent lw 2
+set terminal pngcairo enhanced size 1280,960 font "Arial, 20" lw 2
 
 set encoding utf8
 
@@ -68,6 +68,7 @@ plot directory."/rec_lambda.dat" u 1:2 w lp ls 1 lw 2 ps 1.5
 
 set output directory."/plots/lambda_infect.png"
 
+set xlabel "t (adim.)"
 set xrange [0:20]
 set key inside top right vertical
 set ylabel "# Infected"
@@ -88,12 +89,11 @@ set output directory."/plots/lambda_all_hist.png"
 unset xlabel
 unset ylabel 
 
-set terminal pngcairo enhanced size 1280,980 font "Arial, 20" transparent lw 2
 set multiplot layout 4,3 upwards
 unset key
 
-set rmargin 2.8
-set lmargin 2.8
+set rmargin 1
+set lmargin 4
 set tmargin 1
 set bmargin 1
 set xtics format "%g" font ",12" offset 0,0.5
