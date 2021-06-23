@@ -93,7 +93,7 @@ set multiplot layout 4,3 upwards
 unset key
 
 set rmargin 1
-set lmargin 4
+set lmargin 2.5
 set tmargin 1
 set bmargin 1
 set xtics format "%g" font ",12" offset 0,0.5
@@ -104,7 +104,7 @@ set title offset 0,-0.7
 
 do for [i=1:23:2] {
     set title sprintf("λ = %5.2f", i/100.) font ",14"
-    plot sprintf(directory."/lambda_%5.3f_evolution_histo.dat", i/100.) u 1:($2+$3+$4) w filledcurves x1 ls 1 t "Susceptible", \
-                                "" u 1:($3+$4)    w filledcurves x1 ls 3 t "Recovered", \
-                                "" u 1:3          w filledcurves x1 ls 2 t "Infected"
+    plot sprintf(directory."/lambda_%5.3f_evolution_histo.dat", i/100.) u 1:(($2+$3+$4)/($2+$3+$4)) w filledcurves x1 ls 1 t "Susceptible", \
+                                "" u 1:(($3+$4)/($2+$3+$4))    w filledcurves x1 ls 3 t "Recovered", \
+                                "" u 1:($3/($2+$3+$4))          w filledcurves x1 ls 2 t "Infected"
 }
