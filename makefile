@@ -29,6 +29,7 @@ plots:
 
 hist:
 	gnuplot -e "path='$(file)" one_hist.plt
+
 clean:
 	rm -f $(objects)
 
