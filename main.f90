@@ -59,7 +59,7 @@ do lambda_i=1,N_lambda
       ! open(2,file="results/log.txt")
 
       do sample=1,N_sample
-            write(*,"(I2,A,I2, A ,I5,A,I5,A)",advance="no")lambda_i,"of",N_lambda,"|",sample,"of",N_sample,"samples"
+            write(*,"(I2,A,I2, A ,I5,A,I5,A)",advance="no")lambda_i," of ",N_lambda," | ",sample," of ",N_sample," samples"
             call execute_command_line('echo "\033[A"')
             call init_states(20)
 
