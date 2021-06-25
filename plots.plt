@@ -14,36 +14,6 @@ set style line 1 pt 7 ps 1 lc rgbcolor "#118ab2"  # Recovered
 set style line 2 pt 7 ps 1 lc rgbcolor "#ef476f"  # Infected
 set style line 3 pt 7 ps 1 lc rgbcolor "#06d6a0"  # Susceptible
 
-#############
-# EVOLUTION #
-#############
-
-# set output directory."/plots/evolution.eps"
-# set output directory."/plots/evolution.png"
-
-# set xlabel "t (adim.)"
-# set ylabel "# Infected"
-
-# unset key
-
-# plot directory."/evolution.dat" u 1:3 w lp ls 1 lw 2
-
-##################
-# LINE HISTOGRAM #
-##################
-
-# set output directory."/plots/histrograms.eps"
-# set output directory."/plots/histrograms.png"
-
-# set xlabel "t (adim.)"
-# unset ylabel 
-
-# set xrange [*:*]
-# set yrange [*:*] 
-
-# set key
-
-# plot directory."/evolution_histo.dat" u 1:2 w lp ls 1 t "Susceptible", "" u 1:3 w lp ls 2 t "Infected", "" u 1:4 w lp ls 3 t "Recovered"
 
 ####################
 # LAMBDA EVOLUTION #
@@ -89,7 +59,7 @@ set output directory."/plots/lambda_all_hist.png"
 unset xlabel
 unset ylabel 
 
-set multiplot layout 4,3 upwards
+set multiplot layout 3,3
 unset key
 
 set rmargin 1
@@ -102,9 +72,11 @@ set tics front
 
 set title offset 0,-0.7
 
-do for [i=1:25:2] {
-    set title sprintf("λ = %5.3f", (i-1)/100. +0.001) font ",14"
-    plot sprintf(directory."/lambda_%5.3f_evolution_histo.dat", (i-1)/100. + 0.001) u 1:(($2+$3+$4)/($2+$3+$4)) w filledcurves x1 ls 1 t "Susceptible", \
-                                                                     "" u 1:(($3+$4)/($2+$3+$4))    w filledcurves x1 ls 3 t "Recovered", \
-                                                                     "" u 1:($3/($2+$3+$4))         w filledcurves x1 ls 2 t "Infected"
+lambdas = "0.001 0.011 0.031 0.051 0.091 0.131 0.151 0.191 0.241"
+
+do for [i in lambdas] {
+    set title "λ = ".i font ",14"
+    plot directory."/lambda_".i."_evolution_histo.dat" u 1:(($2+$3+$4)/($2+$3+$4)) w filledcurves x1 ls 1 t "Susceptible", \
+                                                    "" u 1:(($3+$4)/($2+$3+$4))    w filledcurves x1 ls 3 t "Recovered", \
+                                                    "" u 1:($3/($2+$3+$4))         w filledcurves x1 ls 2 t "Infected"
 }
