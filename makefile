@@ -20,7 +20,7 @@ main.o: main.f90 network.o sir.o
 
 sim: main.x
 	mkdir -p $(dir_net)
-	./main.x $(dir_net) $(N_sample) $(offset)
+	./main.x $(dir_net) $(N_samples) $(offset)
 	make plots
 
 plots:

@@ -76,8 +76,8 @@ set ylabel "# Infected"
 set palette defined ( 0 "#118ab2", 0.5 "#06d6a0", 1 "#ef476f" )
 unset colorbox
 
-plot for [i=1:23:2] sprintf(directory."/lambda_%5.3f_evolution_histo.dat", i/100.) u 1:3:0 \
-                    w l lw 1.5 lc palette frac (i / 23.) t sprintf("λ = %5.2f", i/100.)
+plot for [i=1:25:2] sprintf(directory."/lambda_%5.3f_evolution_histo.dat", (i-1)/100. + 0.001) u 1:3:0 \
+                    w l lw 1.5 lc palette frac ((i-1)/ 25.) t sprintf("λ = %5.3f", (i-1)/100. + 0.001)
 
 ############################
 # LAMBDA FILLED HISTOGRAMS #
@@ -102,9 +102,9 @@ set tics front
 
 set title offset 0,-0.7
 
-do for [i=1:23:2] {
-    set title sprintf("λ = %5.2f", i/100.) font ",14"
-    plot sprintf(directory."/lambda_%5.3f_evolution_histo.dat", i/100.) u 1:(($2+$3+$4)/($2+$3+$4)) w filledcurves x1 ls 1 t "Susceptible", \
+do for [i=1:25:2] {
+    set title sprintf("λ = %5.3f", (i-1)/100. +0.001) font ",14"
+    plot sprintf(directory."/lambda_%5.3f_evolution_histo.dat", (i-1)/100. + 0.001) u 1:(($2+$3+$4)/($2+$3+$4)) w filledcurves x1 ls 1 t "Susceptible", \
                                                                      "" u 1:(($3+$4)/($2+$3+$4))    w filledcurves x1 ls 3 t "Recovered", \
                                                                      "" u 1:($3/($2+$3+$4))         w filledcurves x1 ls 2 t "Infected"
 }

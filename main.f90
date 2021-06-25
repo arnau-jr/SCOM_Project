@@ -12,8 +12,8 @@ real*8             :: N_sus_histo_acu(Nt),N_inf_histo_acu(Nt),N_rec_histo_acu(Nt
 real*8             :: t
 integer            :: i,j,sample,k_t,lambda_i
 
-real*8,parameter   :: dlambda = 0.02d0
-integer,parameter  :: N_lambda = int((0.25d0-0.01d0)/dlambda) + 1
+real*8,parameter   :: dlambda = 0.01d0
+integer,parameter  :: N_lambda = int((0.25d0-0.001d0)/dlambda) + 1
 real*8             :: lambda_array(N_lambda)
 real*8             :: rec_all(N_lambda)
 
@@ -30,7 +30,7 @@ allocate(N_sus_histo(Nt,N_sample),N_inf_histo(Nt,N_sample),N_rec_histo(Nt,N_samp
 delta = 1.d0
 
 do i = 1, N_lambda
-      lambda_array(i) = 0.01 + (i - 1) * dlambda
+      lambda_array(i) = 0.001 + (i - 1) * dlambda
 end do
 
 call sgrnd(879465132)
@@ -47,7 +47,6 @@ close(1)
 call init_sir()
 
 do lambda_i=1,N_lambda
-      print*,lambda_i,"of",N_lambda
       lambda = lambda_array(lambda_i)
 
       N_sus_histo = 0.d0
@@ -60,7 +59,9 @@ do lambda_i=1,N_lambda
       ! open(2,file="results/log.txt")
 
       do sample=1,N_sample
-            call init_states(5)
+            write(*,"(I2,A,I2, A ,I5,A,I5,A)",advance="no")lambda_i,"of",N_lambda,"|",sample,"of",N_sample,"samples"
+            call execute_command_line('echo "\033[A"')
+            call init_states(20)
 
             ! N_sus_histo(1) = N_sus_histo(1) + N_sus
             ! N_inf_histo(1) = N_inf_histo(1) + N_inf
