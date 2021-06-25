@@ -21,7 +21,7 @@ The plots obtained are:
 
 ![Broken link](https://github.com/arnau-jr/SCOM_Project/blob/main/net50000.dat/plots/lambda_infect.png)
 
-2. All evolutions of susceptible, recovered and infected for all infectivity parameters.
+2. Evolutions of susceptible, recovered and infected for selected infectivity parameters (modify in `plots.plt` file if needed).
 
 ![Broken link](https://github.com/arnau-jr/SCOM_Project/blob/main/net50000.dat/plots/lambda_all_hist.png)
 
