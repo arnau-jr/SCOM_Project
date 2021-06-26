@@ -27,10 +27,12 @@ set ylabel "R (t→∞)"
 
 set xrange [*:*]
 set yrange [*:*] 
+set xtics 0,0.025,0.25
 
 unset key
 
 plot directory."/rec_lambda.dat" u 1:2 w lp ls 1 lw 2 ps 1.5
+set xtics autofreq
 
 ###################
 # LAMBDA INFECTED #
