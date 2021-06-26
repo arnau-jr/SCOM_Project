@@ -3,11 +3,12 @@ This code simulates the spread of an epidemic using the [SIR model](https://en.w
 
 ## Usage
 There are four main commands.
-1. In order to compile the program (if needed), execute the program and plot the results use `make sim dir_net=net1000.dat N_samples=1000 offset=0` changing the variables as needed. 
-* The network file must be saved in the `networks` directory. The results will be saved in a directory with the name of the network (using the example command, the results will be saved in a directory called `net1000.dat/`).
-* `N_samples` indicates how many runs will be performed for each condition.
-* `offset` indicates how many header lines must be skipped by the program when reading the network file.
-
+1. In order to compile the program (if needed), execute the program and plot the results use `make sim dir_net=net1000.dat N_samples=1000 offset=0` changing the variables as needed.
+<br> 
+    * The network file must be saved in the `networks` directory. The results will be saved in a directory with the name of the network (using the example command, the results will be saved in a directory called `net1000.dat/`).
+    * `N_samples` indicates how many runs will be performed for each condition.
+    * `offset` indicates how many header lines must be skipped by the program when reading the network file.
+<br>
 2. In order to just compile use `make`.
 3. In order to create the plots of a previously run simulation use `make plots dir_net=net1000.dat`, where net1000.dat referes now to the folder where the results are stored. The plots will be saved in a subfolder called `net1000.dat/plots/`.
 4. Using the command `make hist file=path_to_file` a single histogram will be generated using the file given.
@@ -34,7 +35,7 @@ The plots obtained are:
 ![Broken link](https://github.com/arnau-jr/SCOM_Project/blob/main/net50000.dat/lambda_0.210_evolution_histo.dat_histogram.png)
 
 ## About
-This code was developed by the authors for the subject of _Complex Systems_ of the _Computational Modelling_ Master in 2021.
+This code was developed by the authors for the subject of _Complex Systems_ of the _Computational Modelling_ Master at Universitat de Barcelona in 2021.
 
 ## Authors & Contact
 
