@@ -22,11 +22,11 @@ module network
             D_net = 0
 
             call get_degrees(unit,offset)
-            allocate(D_count(D_max))
+            allocate(D_count(0:D_max))
 
             call get_pointers(unit,offset)
 
-            ! call get_average_degree()
+            call get_average_degree()
       end subroutine init_net
 
       subroutine get_ne(unit,offset)
@@ -136,7 +136,7 @@ module network
             write(unit,*)"Average degree squared:",avgD2
             write(unit,*)""
             write(unit,*)"Degree | Count"
-            do i=1,D_max
+            do i=0,D_max
                   write(unit,*)i,"|",D_count(i)
             end do
             write(unit,*)
