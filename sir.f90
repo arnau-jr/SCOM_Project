@@ -15,26 +15,6 @@ module sir
 
       end subroutine init_sir
 
-      ! subroutine get_state(unit,offset)
-      !       implicit none
-      !       integer :: counter,i,state
-
-      !       inf = 0
-      !       act_link = 0
-      !       P_act_link = 0
-            
-      !       counter = 1
-      !       do while(.true.)
-      !             read(unit,*,end=20)i,state
-                  
-      !             if(state==1) then
-      !                   inf(counter) = i
-      !                   counter = counter + 1
-      !             end if
-      !       end do
-      !       20 continue
-      ! end subroutine get_state
-
 
       subroutine init_states(N)
             implicit none
@@ -91,38 +71,7 @@ module sir
             act_link(:,E_act) = 0
             E_act = E_act - 1
       end subroutine rem_link
-      
-      ! subroutine rem_link(P_inf)
-      !       implicit none
-      !       integer :: P_inf
-      !       integer :: j
-      !       act_link(:,P_act_link(P_inf)) = act_link(:,E_act)
 
-      !       !A: Implementacio extremadament cutre:
-      !       !Mirem tots els punters dels veins del node infectat de l'ultim
-      !       !link actiu.
-      !       do j=P_ini(act_link(1,E_act)),P_fin(act_link(1,E_act))
-      !             !Si el punter correspon a l'altre node del link
-      !             if(V_net(j)==act_link(2,E_act)) then
-      !                   !Substituim el punter corresponent pel punter nou
-      !                   P_act_link(j) = P_act_link(P_inf)
-      !                   exit !Sortim del loop, mes eficient.
-      !             end if
-      !       end do
-
-      !       !El mateix pero ara mirem tots els punters del node no infectat
-      !       !I canviem el punter del node infectat (per redundancia)
-      !       !Tinc la sensacio de que aquest segon bucle es pot evitar, pero no estic segur
-      !       do j=P_ini(act_link(2,E_act)),P_fin(act_link(2,E_act))
-      !             if(V_net(j)==act_link(1,E_act)) then
-      !                   P_act_link(j) = P_act_link(P_inf)
-      !             end if
-      !       end do
-      !       P_act_link(P_inf) = 0
-      !       !Netejem l'ultim link i reduim el compte de links
-      !       act_link(:,E_act) = 0
-      !       E_act = E_act - 1
-      ! end subroutine rem_link
 
       subroutine add_link(new_inf,P_sus)
             implicit none
@@ -194,7 +143,6 @@ module sir
             real*8               :: x
             integer              :: new_infected,new_recovered,node,unit
 
-            ! unit = 2 !A: badly done
 
             prob_norm = N_inf*delta + E_act*lambda
             prob_inf = E_act*lambda/prob_norm
@@ -204,12 +152,10 @@ module sir
 
             if(x<prob_inf) then
                   new_infected = choose_int(E_act)
-                  ! write(unit,*)"Infecting link",act_link(:,new_infected)
                   node = act_link(2,new_infected)
                   call infect_node(node)
             else
                   new_recovered = choose_int(N_inf)
-                  ! write(unit,*)"Recovering node",inf(new_recovered)
                   node = inf(new_recovered)
                   call recover_node(node)
             end if

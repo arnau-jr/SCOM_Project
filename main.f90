@@ -53,53 +53,35 @@ do lambda_i=1,N_lambda
       N_inf_histo = 0.d0
       N_rec_histo = 0.d0
 
-      ! open(1,file="results/evolution.dat")
-      ! write(1,*)"Time  Inactive  Infected  Recovered  Total(ct.)"
-
-      ! open(2,file="results/log.txt")
-
       do sample=1,N_sample
             write(*,"(I2,A,I2, A ,I5,A,I5,A)",advance="no")lambda_i," of ",N_lambda," | ",sample," of ",N_sample," samples"
             call execute_command_line('echo "\033[A"')
             call init_states(20)
 
-            ! N_sus_histo(1) = N_sus_histo(1) + N_sus
-            ! N_inf_histo(1) = N_inf_histo(1) + N_inf
-            ! N_rec_histo(1) = N_rec_histo(1) + N_rec
-
             N_sus_histo(1,sample) = N_sus
             N_inf_histo(1,sample) = N_inf
             N_rec_histo(1,sample) = N_rec
             
-            ! call print_info(2)
 
             t = 0.d0
             i = 0
-            ! call print_sir_info(2)
+
             do while(.true.)
                   call sir_step(t)
                   i = i + 1
 
                   k_t = int(t/dt) + 2
 
-                  ! N_sus_histo(k_t) = N_sus_histo(k_t) + N_sus
-                  ! N_inf_histo(k_t) = N_inf_histo(k_t) + N_inf
-                  ! N_rec_histo(k_t) = N_rec_histo(k_t) + N_rec
 
                   N_sus_histo(k_t,sample) = N_sus
                   N_inf_histo(k_t,sample) = N_inf
                   N_rec_histo(k_t,sample) = N_rec
 
-                  ! write(1,*)t,N_sus,N_inf,N_rec,N_sus+N_inf+N_rec
 
                   if(N_inf==0) then
-                        ! N_sus_histo(k_t+1:Nt) = N_sus_histo(k_t+1:Nt) + N_sus
-                        ! N_inf_histo(k_t+1:Nt) = N_inf_histo(k_t+1:Nt) + N_inf
-                        ! N_rec_histo(k_t+1:Nt) = N_rec_histo(k_t+1:Nt) + N_rec
                         N_sus_histo(k_t+1:Nt,sample) = N_sus
                         N_inf_histo(k_t+1:Nt,sample) = N_inf
                         N_rec_histo(k_t+1:Nt,sample) = N_rec
-                        
                         do j = 2, k_t
                               if (N_sus_histo(j,sample) == 0) N_sus_histo(j,sample) = N_sus_histo(j-1,sample)
                               if (N_inf_histo(j,sample) == 0) N_inf_histo(j,sample) = N_inf_histo(j-1,sample)
@@ -108,12 +90,6 @@ do lambda_i=1,N_lambda
                         exit
                   end if
             end do
-
-            ! write(2,*)""
-            ! write(2,*)"---End of the infection"
-            ! write(2,*)"Iterations",i
-            ! write(2,*)"Time",t
-            ! call print_sir_info(2)
       end do
 
       N_sus_histo_acu = dble(sum(N_sus_histo,2))/N_sample
@@ -122,7 +98,6 @@ do lambda_i=1,N_lambda
 
       rec_all(lambda_i) = N_rec_histo_acu(Nt)/N_net
 
-      ! open(3,file="results/evolution_histo.dat")
       write(filename,"(A,F5.3,A)") trim(adjustl(dir_net))//"/lambda_",lambda,"_evolution_histo.dat"
       open(3,file=filename)
       write(3,*)"#Time  Inactive  Infected  Recovered  Total(ct.)"
@@ -142,28 +117,6 @@ do i = 1, N_lambda
       write(4,*) lambda_array(i), rec_all(i)
 end do
 close(4)
-
-! close(1)
-! close(2)
-
-! open(1,file="results/test.dat")
-! do i=1,N_net
-!       do j=1,N_net
-!             if(j==N_net) then
-!                   if(any(V_net(P_ini(i):P_fin(i))==j)) then
-!                         write(1,"(I1,X)")1
-!                   else
-!                         write(1,"(I1,X)")0
-!                   end if
-!             else
-!                   if(any(V_net(P_ini(i):P_fin(i))==j)) then
-!                         write(1,"(I1,X)",advance="no")1
-!                   else
-!                         write(1,"(I1,X)",advance="no")0
-!                   end if
-!             end if
-!       end do
-! end do
 
 
 open(1,file=trim(adjustl(dir_net))//"/adj_list.dat")
