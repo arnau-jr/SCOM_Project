@@ -6,12 +6,6 @@ set encoding utf8
 
 set output path."_histogram.png"
 
-# For EPS
-# set style line 1 pt 7 ps 0.5 lc rgbcolor "#118ab2"  # Recovered
-# set style line 2 pt 7 ps 0.5 lc rgbcolor "#ef476f"  # Infected
-# set style line 3 pt 7 ps 0.5 lc rgbcolor "#06d6a0"  # Susceptible
-
-# For pngcairo
 set style line 1 pt 7 ps 1 lc rgbcolor "#118ab2"  # Recovered
 set style line 2 pt 7 ps 1 lc rgbcolor "#ef476f"  # Infected
 set style line 3 pt 7 ps 1 lc rgbcolor "#06d6a0"  # Susceptible

@@ -4,12 +4,6 @@ set terminal pngcairo enhanced size 1280,960 font "Arial, 20" lw 2
 
 set encoding utf8
 
-# For EPS
-# set style line 1 pt 7 ps 0.5 lc rgbcolor "#118ab2"  # Recovered
-# set style line 2 pt 7 ps 0.5 lc rgbcolor "#ef476f"  # Infected
-# set style line 3 pt 7 ps 0.5 lc rgbcolor "#06d6a0"  # Susceptible
-
-# For pngcairo
 set style line 1 pt 7 ps 1 lc rgbcolor "#118ab2"  # Recovered
 set style line 2 pt 7 ps 1 lc rgbcolor "#ef476f"  # Infected
 set style line 3 pt 7 ps 1 lc rgbcolor "#06d6a0"  # Susceptible
@@ -19,7 +13,6 @@ set style line 3 pt 7 ps 1 lc rgbcolor "#06d6a0"  # Susceptible
 # LAMBDA EVOLUTION #
 ####################
 
-# set output directory."/plots/rec_lambda.eps"
 set output directory."/plots/rec_lambda.png"
 
 set xlabel "λ (adim.)"
@@ -55,7 +48,6 @@ plot for [i=1:25:2] sprintf(directory."/lambda_%5.3f_evolution_histo.dat", (i-1)
 # LAMBDA FILLED HISTOGRAMS #
 ############################
 
-# set output directory."/plots/filled_hist.eps"
 set output directory."/plots/lambda_all_hist.png"
 
 unset xlabel
